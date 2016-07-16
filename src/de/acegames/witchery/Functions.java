@@ -15,6 +15,11 @@ import org.bukkit.potion.PotionEffectType;
 public class Functions {
 	Main plugin;
 
+	/**
+	 * "Platzspar-Klasse" (Aussiedlung von code in diese klasse um Riesenklassen zu vermeiden)
+	 * 
+	 * @author Meisterbetrieb
+	 */
 	public void newWitcher(Player player, String profession) throws IOException{
 		if(Main.profcfg.get("prof_" + profession)==null){
 			player.sendMessage(Main.prefix+"§cUnbekannte Spezialisierung");

@@ -19,7 +19,9 @@ public class Main extends JavaPlugin{
 	/**
 	 * UnterKlassen definieren:
 	 * - Functions = Alle Funktionen
-	 * - Files = Alle Files au�er config.yml und plugin.yml
+	 * - Files = Alle Files außer config.yml und plugin.yml
+	 * 
+	 * @author Meisterbetrieb
 	 */
 	private Listeners listeners;
 	private Functions functions;
@@ -28,7 +30,10 @@ public class Main extends JavaPlugin{
 	static FileConfiguration msgcfg, witcherscfg, profcfg, activecfg;
 	
 	/**
-	 * Strings definieren
+	 * - Strings definieren
+	 * - onEnable()
+	 * - onDisable()
+	 * @author Meisterbetrieb
 	 */
 	static String prefix = "§8[§5Witchery§8]§7 ";
 	
@@ -69,20 +74,43 @@ public class Main extends JavaPlugin{
 		this.mclogger.info(pdfFile.getName()+pdfFile.getVersion()+" ist nun deaktiviert!");
 		}
 	}
-	
+	/**
+	 * On Command Teil
+	 * @param
+	 * @author TheBozZ_99
+	 */
 	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
 		Player player = (Player) sender;
 		
-		if(commandLabel.equalsIgnoreCase("witcher")){
-			if(args.length==3)
+		if(commandLabel.equalsIgnoreCase("witchery")){
+			if(args.length==3){
 				if(args[0].equalsIgnoreCase("add")){
-				if(Bukkit.getServer().getPlayer(args[1])!=null){
-					try {
-						functions.newWitcher(player, args[2]);
-					} catch (IOException e) {
-						e.printStackTrace();
+					if(Bukkit.getServer().getPlayer(args[1])!=null){
+						if(witcherscfg.get(player.getName())!=null){
+							try {
+								functions.newWitcher(player, args[2]);
+							} catch (IOException e) {
+								e.printStackTrace();
+							}
+						}
 					}
 				}
+			}
+			if(args.length==1){
+				if(args[0].equalsIgnoreCase("help")){
+					player.sendMessage(prefix+"§8~~~ §5Alle Befehle §8~~~");
+					player.sendMessage(prefix+"§7/§bwitchery how §8|§4|§8| §eAnleitung zum Plugin");
+					player.sendMessage(prefix+"§7/§bwitchery help §8|§4|§8| §eHier bist du gerade");
+					player.sendMessage(prefix+"§7/§bwitchery add <Username> <Spezialität> §8|§4|§8| Cheater! ;D");
+				}
+				if(args[0].equalsIgnoreCase("how")){
+					player.sendMessage(prefix+"§8~~~ §5Wie man ein guter Zauberer ist §8~~~");
+					player.sendMessage(prefix+"§8[§51§7.§8]§b Im Tempel die Purpur Slab auf EmeraldBlock §7(§bThron§7)");
+					player.sendMessage(prefix+"§8[§52§7.§8]§b Wähle deine Spezialität an den Cauldrons (Deinen Hut waschen)");
+					player.sendMessage(prefix+"§8[§53§7.§8]§b Du bekommst einen Zauberstab §7O.o");
+					player.sendMessage(prefix+"§8[§5END§8]§b Weiter gehts wenn du dir die lore des Zauberstabs ansiehst");
+				}
+				
 			}
 		}
 		

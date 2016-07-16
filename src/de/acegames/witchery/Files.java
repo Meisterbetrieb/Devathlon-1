@@ -9,7 +9,11 @@ import org.bukkit.configuration.file.YamlConfiguration;
 public class Files {
 	public static Main plugin;
 	
-
+	/**
+	 * Sowas wie ein File-Manager
+	 * 
+	 * @author TheBozZ_99
+	 */
 	
 	public static void createFile() throws IOException {
 		Main.active = new File(plugin.getDataFolder(), "active-witchers.yml");

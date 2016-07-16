@@ -24,7 +24,11 @@ public class Listeners implements Listener{
 	public static Main plugin;
 	public static Functions functions;
 	public static int count;
-
+/**
+ * EventHandlers
+ *
+ * @author Meisterbetrieb
+ */
 	@EventHandler
 	public void onWandselect(PlayerSwapHandItemsEvent event) throws IOException{
 		Player player = event.getPlayer();

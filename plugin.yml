@@ -1,4 +1,14 @@
-name: Plugin
+name: Witchery
 main: de.acegames.witchery.Main
 authors: [Meisterbetrieb, Laserluffy, TheBozZ_99]
 website: http://acegames.de
+description:
+            > Ein Zauberhaftes Plugin
+commands:
+  witchery:
+    description: HauptBefehl.
+    permission: witchery.main
+permissions:
+  witchery.main:
+    description: Perm for witchery.
+    default: op
