@@ -12,11 +12,16 @@ public class Files {
 
 	
 	public static void createFile() throws IOException {
+		Main.active = new File(plugin.getDataFolder(), "active-witchers.yml");
 		Main.messages = new File(plugin.getDataFolder(), "messages.yml");
 		Main.witchers = new File(plugin.getDataFolder(), "witchers.yml");
 		Main.professions = new File(plugin.getDataFolder(), "professions.yml");
 		
-		
+		if (!Main.active.exists()) {
+			Main.active.getParentFile().mkdirs();
+			plugin.saveResource("active-witchers.yml", false);
+			plugin.mclogger.info("Neues Aktive Zauberer File erstellt!");
+		}
 		if (!Main.messages.exists()) {
 			Main.messages.getParentFile().mkdirs();
 			plugin.saveResource("messages.yml", false);
@@ -32,12 +37,13 @@ public class Files {
 			plugin.saveResource("professions.yml", false);
 			plugin.mclogger.info("Neues ZauberSpezialisierungs File erstellt!");
 		}
-
+		Main.activecfg = new YamlConfiguration();
 		Main.msgcfg = new YamlConfiguration();
 		Main.witcherscfg = new YamlConfiguration();
 		Main.profcfg = new YamlConfiguration();
 		
 		try {
+			Main.activecfg.load(Main.active);
 			Main.msgcfg.load(Main.messages);
 			Main.witcherscfg.load(Main.witchers);
 			Main.profcfg.load(Main.professions);

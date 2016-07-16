@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -14,13 +15,42 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.block.CauldronLevelChangeEvent;
 import org.bukkit.event.block.CauldronLevelChangeEvent.ChangeReason;
+import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerSwapHandItemsEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 public class Listeners implements Listener{
 	public static Main plugin;
 	public static Functions functions;
+	public static int count;
 
+	@EventHandler
+	public void onWandselect(PlayerSwapHandItemsEvent event) throws IOException{
+		Player player = event.getPlayer();
+		ItemStack offhand = event.getOffHandItem();
+		ItemStack mainhand = event.getMainHandItem();
+		
+		functions.useWizardWand(player, offhand, mainhand);
+		
+	}
+	
+	@EventHandler
+	public void onJoin(PlayerJoinEvent event){
+		Player player = event.getPlayer();
+		count = Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable() {
+			@Override
+			public void run() {
+				try {
+					functions.starteffect_itself(player);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				
+			}
+		}, 20, 20);
+	}
+	
 	@EventHandler
 	public void onWitcheryTableCraft(BlockPlaceEvent event) throws IOException{
 		Player player = event.getPlayer();
@@ -38,6 +68,7 @@ public class Listeners implements Listener{
 					 */
 					ItemStack helmet_witcher = new ItemStack(Material.LEATHER_HELMET);
 					ItemMeta meta_helmet_witcher = helmet_witcher.getItemMeta();
+					functions.setColor(helmet_witcher, Color.PURPLE);
 					meta_helmet_witcher.setDisplayName("§a§k++§5Zauberer§a§k++§r");
 					ArrayList<String> lore_helmet_witcher = new ArrayList<String>();
 					lore_helmet_witcher.add("Spezialisierung: wähle an den Kesseln!");
@@ -73,6 +104,7 @@ public class Listeners implements Listener{
 		ItemStack oldhelmet = player.getInventory().getItemInOffHand();
 		ItemStack wizardhelmet = new ItemStack(Material.LEATHER_HELMET);
 		
+		functions.setColor(wizardhelmet, Color.PURPLE);
 		ItemMeta meta_wizardhelmet = wizardhelmet.getItemMeta();
 		meta_wizardhelmet.setDisplayName("§a§k++§5Zauberer§a§k++§r");
 		ArrayList<String> lore_helmet_witcher = new ArrayList<String>();
@@ -81,7 +113,8 @@ public class Listeners implements Listener{
 		wizardhelmet.setItemMeta(meta_wizardhelmet);
 		
 		if(event.getReason()==ChangeReason.ARMOR_WASH){
-			if(oldhelmet==wizardhelmet && oldhelmet.getItemMeta() == wizardhelmet.getItemMeta()){
+			if(oldhelmet.isSimilar(wizardhelmet)){
+				player.getInventory().remove(oldhelmet);
 				Location loc = event.getBlock().getLocation();
 				Location prof_block = new Location(loc.getWorld(), loc.getBlock().getX(), loc.getBlock().getY()-1, loc.getBlock().getZ());
 				if(!Main.professions.exists()){ functions.loadProfessions(); }
@@ -100,6 +133,7 @@ public class Listeners implements Listener{
 						lore.clear();
 						lore.add("Spezialisierung: Stärke");
 						prof_meta.setLore(lore);
+						functions.setColor(prof_helmet, Color.RED);
 						prof_helmet.setItemMeta(prof_meta);
 						player.getInventory().setHelmet(prof_helmet);
 					}
@@ -109,6 +143,7 @@ public class Listeners implements Listener{
 						lore.clear();
 						lore.add("Spezialisierung: Vergiftung");
 						prof_meta.setLore(lore);
+						functions.setColor(prof_helmet, Color.LIME);
 						prof_helmet.setItemMeta(prof_meta);
 						player.getInventory().setHelmet(prof_helmet);
 					}
@@ -118,6 +153,7 @@ public class Listeners implements Listener{
 						lore.clear();
 						lore.add("Spezialisierung: Regeneration");
 						prof_meta.setLore(lore);
+						functions.setColor(prof_helmet, Color.AQUA);
 						prof_helmet.setItemMeta(prof_meta);
 						player.getInventory().setHelmet(prof_helmet);
 					}
@@ -127,6 +163,7 @@ public class Listeners implements Listener{
 						lore.clear();
 						lore.add("Spezialisierung: Wasseraffinität");
 						prof_meta.setLore(lore);
+						functions.setColor(prof_helmet, Color.BLUE);
 						prof_helmet.setItemMeta(prof_meta);
 						player.getInventory().setHelmet(prof_helmet);
 					}
@@ -136,6 +173,7 @@ public class Listeners implements Listener{
 						lore.clear();
 						lore.add("Spezialisierung: Schnelligkeit");
 						prof_meta.setLore(lore);
+						functions.setColor(prof_helmet, Color.WHITE);
 						prof_helmet.setItemMeta(prof_meta);
 						player.getInventory().setHelmet(prof_helmet);
 					}

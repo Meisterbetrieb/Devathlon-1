@@ -24,8 +24,8 @@ public class Main extends JavaPlugin{
 	private Listeners listeners;
 	private Functions functions;
 	public static Files files;
-	static File messages, witchers, professions;
-	static FileConfiguration msgcfg, witcherscfg, profcfg;
+	static File messages, witchers, professions, active;
+	static FileConfiguration msgcfg, witcherscfg, profcfg, activecfg;
 	
 	/**
 	 * Strings definieren
@@ -77,7 +77,11 @@ public class Main extends JavaPlugin{
 			if(args.length==3)
 				if(args[0].equalsIgnoreCase("add")){
 				if(Bukkit.getServer().getPlayer(args[1])!=null){
-					functions.newWitcher(player, args[2]);
+					try {
+						functions.newWitcher(player, args[2]);
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
 				}
 			}
 		}
