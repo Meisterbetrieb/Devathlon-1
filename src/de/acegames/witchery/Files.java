@@ -10,22 +10,38 @@ import org.bukkit.configuration.file.YamlConfiguration;
 public class Files {
 	public static Main plugin;
 	
-	private static File file;
-	private static FileConfiguration filecfg;
 
 	
 	public static void createFile() throws IOException {
-		file = new File(plugin.getDataFolder(), "Permissions_unused-file.yml");
+		Main.messages = new File(plugin.getDataFolder(), "messages.yml");
+		Main.witchers = new File(plugin.getDataFolder(), "witchers.yml");
+		Main.professions = new File(plugin.getDataFolder(), "professions.yml");
 		
-		if (!file.exists()) {
-			file.getParentFile().mkdirs();
-			plugin.saveResource("Commands_unused-file.yml", false);
+		
+		if (!Main.messages.exists()) {
+			Main.messages.getParentFile().mkdirs();
+			plugin.saveResource("messages.yml", false);
+			plugin.mclogger.info("Neues Nachrichten File erstellt!");
+		}
+		if (!Main.witchers.exists()) {
+			Main.witchers.getParentFile().mkdirs();
+			plugin.saveResource("witchers.yml", false);
+			plugin.mclogger.info("Neues Zauberer Haupt-File erstellt!");
+		}
+		if (!Main.professions.exists()) {
+			Main.professions.getParentFile().mkdirs();
+			plugin.saveResource("professions.yml", false);
+			plugin.mclogger.info("Neues ZauberSpezialisierungs File erstellt!");
 		}
 
-		filecfg = new YamlConfiguration();
+		Main.msgcfg = new YamlConfiguration();
+		Main.witcherscfg = new YamlConfiguration();
+		Main.profcfg = new YamlConfiguration();
 		
 		try {
-			filecfg.load(file);
+			Main.msgcfg.load(Main.messages);
+			Main.witcherscfg.load(Main.witchers);
+			Main.profcfg.load(Main.professions);
 		} catch (IOException | InvalidConfigurationException e) {
 			e.printStackTrace();
 		}
