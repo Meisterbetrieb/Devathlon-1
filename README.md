@@ -1,6 +1,6 @@
 - MySQL wird nicht genutzt
 - Anleitung InGame mit '/witchery how' erfragbar
-Zeitplan:
+- Zeitplan:
 
 12:00-13:45 Gearbeitet
 
