@@ -1,4 +1,5 @@
 # Die Haupt-KonfigurationsDatei vom "Witchery"-Plugin
+# Made by Meisterbetrieb
 
 # Output ("... ist nun aktiv"/"... ist nun deaktiviert")beim Start und Stopp des Servers deaktivieren
 console-output-on-startup-and-end: true
