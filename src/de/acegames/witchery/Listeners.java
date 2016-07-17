@@ -11,11 +11,13 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.block.CauldronLevelChangeEvent;
 import org.bukkit.event.block.CauldronLevelChangeEvent.ChangeReason;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerSwapHandItemsEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -81,14 +83,16 @@ public class Listeners implements Listener{
 					
 					
 					
-					player.sendMessage(Main.prefix+"§a!");
+					player.sendMessage(Main.prefix+"§aDu bist nun ein Zauberer!");
 					if(!Main.witcherscfg.contains(player.getName())){
-						Main.witcherscfg.set(player.getName(), Main.profcfg.getString(player.getName()));
+						Main.witcherscfg.set(player.getName(), true);
+						Main.witcherscfg.save(Main.witchers);
 					}
 					player.getInventory().setHelmet(helmet_witcher);
 					functions.loadProfessions();
 					if(Main.profcfg.getString(player.getName())!=null){
 						Main.profcfg.set(player.getName(), null);
+						Main.profcfg.save(Main.professions);
 					}
 					
 					
@@ -99,7 +103,14 @@ public class Listeners implements Listener{
 		}
 			
 		}
-		
+	@EventHandler(priority=EventPriority.HIGHEST)
+	public void laufen(PlayerMoveEvent event){
+		Player player = event.getPlayer();
+		Location blockunder = new Location(player.getWorld(), player.getLocation().getBlock().getX(), player.getLocation().getBlock().getY()-1, player.getLocation().getBlock().getZ() );
+		if(blockunder.getBlock().getType()==Material.ENDER_STONE){
+			player.setHealth(player.getHealth()-1);
+		}
+	}
 	
 	@EventHandler
 	public void professionWaehlen(CauldronLevelChangeEvent event) throws IOException{

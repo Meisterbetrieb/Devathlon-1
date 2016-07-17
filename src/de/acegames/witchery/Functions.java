@@ -87,7 +87,7 @@ public class Functions {
 		lore.add("4. ab schritt 2 wieder");
 		magicmeta.setLore(lore);
 		magicwand.setItemMeta(magicmeta);
-		if(offhand.isSimilar(magicwand)){
+		if(mainhand.isSimilar(magicwand)){
 			Main.activecfg.set(player.getName(), true);
 			Main.activecfg.save(Main.active);
 		}else{
@@ -107,27 +107,51 @@ public class Functions {
 			player.sendMessage("§cDu hast keine ZauberFähigkeiten");
 		}else if(Main.profcfg.getString(player.getName()).equalsIgnoreCase("prof_speed")){
 			player.sendMessage("§aSpeed Zauber auf dich angewendet!");
-			for(int i=0; i>100; i++){
+			for(int i=0; i>6000; i++){
 				PotionEffect effect = new PotionEffect(PotionEffectType.SPEED, 5, 3, false);
 				player.addPotionEffect(effect);
+				if(i==4800){
+					player.sendMessage("Dein Zauber läuft bald aus!");
+				}
+				if(i==6000){
+					player.sendMessage("Dein Zauber ist ausgelaufen!");
+				}
 			}
 		}else if(Main.profcfg.getString(player.getName()).equalsIgnoreCase("prof_regeneration")){
 			player.sendMessage("§aRegenerations Zauber auf dich angewendet!");
 			for(int i=0; i>100; i++){
 				PotionEffect effect = new PotionEffect(PotionEffectType.REGENERATION, 5, 3, false);
 				player.addPotionEffect(effect);
+				if(i==4800){
+					player.sendMessage("Dein Zauber läuft bald aus!");
+				}
+				if(i==6000){
+					player.sendMessage("Dein Zauber ist ausgelaufen!");
+				}
 			}
 		}else if(Main.profcfg.getString(player.getName()).equalsIgnoreCase("prof_water")){
 			player.sendMessage("§aWasseraffinitäts Zauber auf dich angewendet!");
 			for(int i=0; i>100; i++){
 				PotionEffect effect = new PotionEffect(PotionEffectType.SPEED, 5, 3, false);
 				player.addPotionEffect(effect);
+				if(i==4800){
+					player.sendMessage("Dein Zauber läuft bald aus!");
+				}
+				if(i==6000){
+					player.sendMessage("Dein Zauber ist ausgelaufen!");
+				}
 			}
 		}else if(Main.profcfg.getString(player.getName()).equalsIgnoreCase("prof_strength")){
 			player.sendMessage("§aStaerke Zauber auf dich angewendet!");
 			for(int i=0; i>100; i++){
 				PotionEffect effect = new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 5, 3, false);
 				player.addPotionEffect(effect);
+				if(i==4800){
+					player.sendMessage("Dein Zauber läuft bald aus!");
+				}
+				if(i==6000){
+					player.sendMessage("Dein Zauber ist ausgelaufen!");
+				}
 			}
 		}
 			

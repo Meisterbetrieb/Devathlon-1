@@ -96,6 +96,15 @@ public class Main extends JavaPlugin{
 					}
 				}
 			}
+			if(args.length==2){
+				player.sendMessage(prefix+"§8HilfeSeite: §7/§bwitchery help");
+			}
+			if(args.length==0){
+				player.sendMessage(prefix+"§8HilfeSeite: §7/§bwitchery help");
+			}
+			if(args.length>3){
+				player.sendMessage(prefix+"§8HilfeSeite: §7/§bwitchery help");
+			}
 			if(args.length==1){
 				if(args[0].equalsIgnoreCase("help")){
 					player.sendMessage(prefix+"§8~~~ §5Alle Befehle §8~~~");
@@ -112,6 +121,49 @@ public class Main extends JavaPlugin{
 				}
 				
 			}
+		}
+		if(commandLabel.equalsIgnoreCase("witchery-admin")){
+			if(args.length==2){
+				if(args[0].equalsIgnoreCase("add")){
+					if(Bukkit.getServer().getPlayer(args[1])!=null){
+						witcherscfg.set(args[1], true);
+						try {
+							witcherscfg.save(witchers);
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
+						Player targetplayer = Bukkit.getServer().getPlayer(args[1]);
+						targetplayer.sendMessage(prefix+"Ein Admin ("+player.getName()+") hat ich zum Zauberer gemacht");
+					}
+				}
+				if(args[0].equalsIgnoreCase("remove")){
+					if(Bukkit.getServer().getPlayer(args[1])!=null){
+						witcherscfg.set(args[1], null);
+						try {
+							witcherscfg.save(witchers);
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
+						Player targetplayer = Bukkit.getServer().getPlayer(args[1]);
+						targetplayer.sendMessage(prefix+"Ein Admin ("+player.getName()+") hat dir deine Zauberkräfte entzogen");
+					}
+				}
+				if(args[0].equalsIgnoreCase("noprof")){
+					if(Bukkit.getServer().getPlayer(args[1])!=null){
+						profcfg.set(args[1], null);
+						try {
+							profcfg.save(professions);
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
+						Player targetplayer = Bukkit.getServer().getPlayer(args[1]);
+						targetplayer.sendMessage(prefix+"Ein Admin ("+player.getName()+") hat deine Spezialisierung von dir entfernt");
+					}
+				}
+			}else{	
+				player.sendMessage(prefix+"§8Benutzung: §7/§bwitchery-admin <add/remove/noprof> <Player>");
+			}
+			
 		}
 		
 		return false;
