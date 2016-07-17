@@ -13,7 +13,8 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 public class Functions {
-	Main plugin;
+	public static Main plugin;
+	
 
 	/**
 	 * "Platzspar-Klasse" (Aussiedlung von code in diese klasse um Riesenklassen zu vermeiden)
@@ -48,7 +49,7 @@ public class Functions {
 	}
 	public void loadProfessions() throws IOException{
 		if(!Main.professions.exists()){
-			Files.createFile();
+			plugin.createFile();
 		}
 		if(Main.profcfg.get("prof_speed")==null){ //Eisen
 			Main.profcfg.set("prof_speed", true);

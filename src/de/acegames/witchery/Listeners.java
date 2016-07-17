@@ -16,22 +16,22 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.block.CauldronLevelChangeEvent;
 import org.bukkit.event.block.CauldronLevelChangeEvent.ChangeReason;
-import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerSwapHandItemsEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 public class Listeners implements Listener{
 	public static Main plugin;
 	public static Functions functions;
-	public static int count;
 /**
  * EventHandlers
  *
  * @author Meisterbetrieb
  */
-	@EventHandler
+	@EventHandler(priority=EventPriority.HIGHEST)
 	public void onWandselect(PlayerSwapHandItemsEvent event) throws IOException{
 		Player player = event.getPlayer();
 		ItemStack offhand = event.getOffHandItem();
@@ -41,23 +41,8 @@ public class Listeners implements Listener{
 		
 	}
 	
-	@EventHandler
-	public void onJoin(PlayerJoinEvent event){
-		Player player = event.getPlayer();
-		count = Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable() {
-			@Override
-			public void run() {
-				try {
-					functions.starteffect_itself(player);
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-				
-			}
-		}, 20, 20);
-	}
 	
-	@EventHandler
+	@EventHandler(priority=EventPriority.HIGHEST)
 	public void onWitcheryTableCraft(BlockPlaceEvent event) throws IOException{
 		Player player = event.getPlayer();
 		Block blockplaced = event.getBlock();
@@ -74,7 +59,7 @@ public class Listeners implements Listener{
 					 */
 					ItemStack helmet_witcher = new ItemStack(Material.LEATHER_HELMET);
 					ItemMeta meta_helmet_witcher = helmet_witcher.getItemMeta();
-					functions.setColor(helmet_witcher, Color.PURPLE);
+//					functions.setColor(helmet_witcher, Color.PURPLE);
 					meta_helmet_witcher.setDisplayName("§a§k++§5Zauberer§a§k++§r");
 					ArrayList<String> lore_helmet_witcher = new ArrayList<String>();
 					lore_helmet_witcher.add("Spezialisierung: wähle an den Kesseln!");
@@ -108,11 +93,12 @@ public class Listeners implements Listener{
 		Player player = event.getPlayer();
 		Location blockunder = new Location(player.getWorld(), player.getLocation().getBlock().getX(), player.getLocation().getBlock().getY()-1, player.getLocation().getBlock().getZ() );
 		if(blockunder.getBlock().getType()==Material.ENDER_STONE){
-			player.setHealth(player.getHealth()-1);
+			PotionEffect potion = new PotionEffect(PotionEffectType.POISON, 1, 1, false);
+			player.addPotionEffect(potion);
 		}
 	}
 	
-	@EventHandler
+	@EventHandler(priority=EventPriority.HIGHEST)
 	public void professionWaehlen(CauldronLevelChangeEvent event) throws IOException{
 		Entity entity = event.getEntity();
 		Player player = Bukkit.getServer().getPlayer(entity.getName());

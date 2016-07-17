@@ -7,14 +7,20 @@ import java.util.logging.Logger;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
 
-public class Main extends JavaPlugin{
+public class Main extends JavaPlugin implements Listener{
 	public final Logger mclogger = Logger.getLogger("Minecraft");
-	public static Main plugin;
+	public Main plugin = this;
 	
 	/**
 	 * UnterKlassen definieren:
@@ -23,11 +29,10 @@ public class Main extends JavaPlugin{
 	 * 
 	 * @author Meisterbetrieb
 	 */
-	private Listeners listeners;
+	public final Listeners listeners = new Listeners();
 	private Functions functions;
-	public static Files files;
-	static File messages, witchers, professions, active;
-	static FileConfiguration msgcfg, witcherscfg, profcfg, activecfg;
+	public static File messages, witchers, professions, active;
+	public static FileConfiguration msgcfg, witcherscfg, profcfg, activecfg;
 	
 	/**
 	 * - Strings definieren
@@ -35,6 +40,7 @@ public class Main extends JavaPlugin{
 	 * - onDisable()
 	 * @author Meisterbetrieb
 	 */
+	public int count;
 	static String prefix = "§8[§5Witchery§8]§7 ";
 	
 	@Override
@@ -48,13 +54,14 @@ public class Main extends JavaPlugin{
 		
 		//Extra Files erstellen
 		try {
-			Files.createFile();
+			createFile();
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
 		
 		//Intialisiere die Listener Klasse
-		Bukkit.getServer().getPluginManager().registerEvents(listeners, this);
+		Bukkit.getServer().getPluginManager().registerEvents(this.listeners, this);
+		Bukkit.getServer().getPluginManager().registerEvents(this, this);
 		
 		//Plugin-Aktivierungs-Nachricht
 		if(this.getConfig().getBoolean("console-output-on-startup-and-end")){
@@ -74,6 +81,67 @@ public class Main extends JavaPlugin{
 		this.mclogger.info(pdfFile.getName()+pdfFile.getVersion()+" ist nun deaktiviert!");
 		}
 	}
+	
+	@EventHandler(priority=EventPriority.HIGHEST)
+	public void onJoin(PlayerJoinEvent event){
+		Player player = event.getPlayer();
+		count = Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable() {
+			@Override
+			public void run() {
+				try {
+					functions.starteffect_itself(player);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				
+			}
+		}, 20, 20);
+	}
+	
+	public void createFile() throws IOException {
+		active = new File(getDataFolder(), "active-witchers.yml");
+		messages = new File(getDataFolder(), "messages.yml");
+		witchers = new File(getDataFolder(), "witchers.yml");
+		professions = new File(getDataFolder(), "professions.yml");
+		
+		if (!active.exists()) {
+			active.getParentFile().mkdirs();
+			saveResource("active-witchers.yml", false);
+			this.mclogger.info("Neues Aktive Zauberer File erstellt!");
+		}
+		if (!messages.exists()) {
+			messages.getParentFile().mkdirs();
+			saveResource("messages.yml", false);
+			this.mclogger.info("Neues Nachrichten File erstellt!");
+		}
+		if (!witchers.exists()) {
+			witchers.getParentFile().mkdirs();
+			saveResource("witchers.yml", false);
+			this.mclogger.info("Neues Zauberer Haupt-File erstellt!");
+		}
+		if (!professions.exists()) {
+			professions.getParentFile().mkdirs();
+			saveResource("professions.yml", false);
+			this.mclogger.info("Neues ZauberSpezialisierungs File erstellt!");
+		}
+		activecfg = new YamlConfiguration();
+		msgcfg = new YamlConfiguration();
+		witcherscfg = new YamlConfiguration();
+		profcfg = new YamlConfiguration();
+		
+		try {
+			activecfg.load(active);
+			msgcfg.load(messages);
+			witcherscfg.load(witchers);
+			profcfg.load(professions);
+		} catch (IOException | InvalidConfigurationException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	
+	
+	
 	/**
 	 * On Command Teil
 	 * @param
@@ -123,6 +191,7 @@ public class Main extends JavaPlugin{
 			}
 		}
 		if(commandLabel.equalsIgnoreCase("witchery-admin")){
+			if(player.hasPermission("witchery.admin")){
 			if(args.length==2){
 				if(args[0].equalsIgnoreCase("add")){
 					if(Bukkit.getServer().getPlayer(args[1])!=null){
@@ -164,6 +233,7 @@ public class Main extends JavaPlugin{
 				player.sendMessage(prefix+"§8Benutzung: §7/§bwitchery-admin <add/remove/noprof> <Player>");
 			}
 			
+			}
 		}
 		
 		return false;
